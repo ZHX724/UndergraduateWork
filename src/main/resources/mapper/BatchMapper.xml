@@ -13,9 +13,10 @@
         <result column="created_at" property="createdAt"/>
     </resultMap>
 
-    <insert id="insert" parameterType="org.demo.blockchaintracksystem.entity.Batch" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="org.demo.blockchaintracksystem.entity.Batch"
+            useGeneratedKeys="true" keyProperty="id">
         INSERT INTO batch (product_id, batch_code, production_date, created_at)
-        VALUES (#{productId}, #{batchCode}, #{productionDate}, NOW())
+        VALUES (#{productId}, #{batchCode}, #{productionDate}, #{createdAt})
     </insert>
 
     <select id="selectByProductId" resultMap="BatchMap">
@@ -25,20 +26,22 @@
         ORDER BY id DESC
     </select>
 
-    <!-- product 是否属于当前 uid -->
-    <select id="countProductOwnedByUid" resultType="int">
-        SELECT COUNT(1)
-        FROM product
-        WHERE id = #{productId} AND user_id = #{uid}
+    <select id="selectById" resultMap="BatchMap">
+        SELECT id, product_id, batch_code, production_date, created_at
+        FROM batch
+        WHERE id = #{id}
+        LIMIT 1
     </select>
 
-    <!-- 删除：通过 join product 限制只能删自己的 -->
-    <delete id="deleteByIdAndUid">
-        DELETE b
-        FROM batch b
-        JOIN product p ON p.id = b.product_id
-        WHERE b.id = #{batchId}
-        AND p.user_id = #{uid}
+    <delete id="deleteById">
+        DELETE FROM batch WHERE id = #{id}
     </delete>
+    <select id="selectByBatchCode" resultMap="BatchMap">
+        SELECT id, product_id, batch_code, production_date, created_at
+        FROM batch
+        WHERE batch_code = #{batchCode}
+        LIMIT 1
+    </select>
+
 
 </mapper>

@@ -27,12 +27,14 @@
         (#{batchId}, #{type}, #{content}, #{status}, #{createdAt}, #{prevHash}, #{dataHash}, #{blockHash}, #{nonce}, #{height})
     </insert>
 
-    <select id="selectByBatchId" resultMap="TraceRecordMap">
+
+    <select id="selectByBatchIdOrderByHeight" resultMap="TraceRecordMap">
         SELECT id, batch_id, type, content, status, created_at, prev_hash, data_hash, block_hash, nonce, height
         FROM trace_record
         WHERE batch_id = #{batchId}
         ORDER BY height ASC, id ASC
     </select>
+
 
     <select id="selectLastByBatchId" resultMap="TraceRecordMap">
         SELECT id, batch_id, type, content, status, created_at, prev_hash, data_hash, block_hash, nonce, height
@@ -41,26 +43,5 @@
         ORDER BY height DESC, id DESC
         LIMIT 1
     </select>
-    <select id="selectByBatchId" resultMap="TraceRecordMap">
-        SELECT *
-        FROM trace_record
-        WHERE batch_id = #{batchId}
-        ORDER BY height ASC
-    </select>
-    <select id="selectByBatchIdOrderByHeight" resultMap="TraceRecordMap">
-        SELECT *
-        FROM trace_record
-        WHERE batch_id = #{batchId}
-        ORDER BY height ASC
-    </select>
-
-    <select id="selectLastByBatchId" resultMap="TraceRecordMap">
-        SELECT *
-        FROM trace_record
-        WHERE batch_id = #{batchId}
-        ORDER BY height DESC
-        LIMIT 1
-    </select>
-
 
 </mapper>

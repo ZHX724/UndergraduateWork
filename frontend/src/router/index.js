@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Home from '../views/Home.vue'
-import Product from '../views/Product.vue'
+import PublicTraceQuery from '../views/PublicTraceQuery.vue' // ✅ 新增：消费者查询页
 
 import request from '@/utils/request'
 
@@ -12,7 +12,13 @@ const router = createRouter({
         { path: '/', redirect: '/login' },
         { path: '/login', component: Login },
         { path: '/register', component: Register },
+
+        // ✅ 消费者查询（免登录）
+        { path: '/public/query', component: PublicTraceQuery },
+
+        // 管理端（需要登录）
         { path: '/home', component: Home },
+
         { path: '/:pathMatch(.*)*', redirect: '/login' },
     ],
 })
@@ -24,6 +30,11 @@ async function isLogin() {
 }
 
 router.beforeEach(async (to, from, next) => {
+    // ✅ 放行：消费者查询页（免登录）
+    if (to.path === '/public/query') {
+        return next()
+    }
+
     // 登录 / 注册页
     if (to.path === '/login' || to.path === '/register') {
         try {

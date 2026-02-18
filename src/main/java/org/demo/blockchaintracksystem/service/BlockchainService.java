@@ -24,7 +24,7 @@ public class BlockchainService {
         int nextHeight = (last == null || last.getHeight() == null) ? 1 : last.getHeight() + 1;
         String prevHash = (last == null) ? "0" : last.getBlockHash();
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().withNano(0);
 
         // dataHash：把“业务数据”固定成摘要（不含 nonce）
         String dataPlain = batchId + "|" + nextHeight + "|" + type + "|" + content + "|" + now + "|" + prevHash;
