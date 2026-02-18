@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.demo.blockchaintracksystem.mapper.TraceRecordMapper">
+
+    <resultMap id="TraceRecordMap" type="org.demo.blockchaintracksystem.entity.TraceRecord">
+        <id column="id" property="id"/>
+        <result column="batch_id" property="batchId"/>
+        <result column="type" property="type"/>
+        <result column="content" property="content"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="prev_hash" property="prevHash"/>
+        <result column="data_hash" property="dataHash"/>
+        <result column="block_hash" property="blockHash"/>
+        <result column="nonce" property="nonce"/>
+        <result column="height" property="height"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.demo.blockchaintracksystem.entity.TraceRecord"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO trace_record
+        (batch_id, type, content, status, created_at, prev_hash, data_hash, block_hash, nonce, height)
+        VALUES
+        (#{batchId}, #{type}, #{content}, #{status}, #{createdAt}, #{prevHash}, #{dataHash}, #{blockHash}, #{nonce}, #{height})
+    </insert>
+
+    <select id="selectByBatchId" resultMap="TraceRecordMap">
+        SELECT id, batch_id, type, content, status, created_at, prev_hash, data_hash, block_hash, nonce, height
+        FROM trace_record
+        WHERE batch_id = #{batchId}
+        ORDER BY height ASC, id ASC
+    </select>
+
+    <select id="selectLastByBatchId" resultMap="TraceRecordMap">
+        SELECT id, batch_id, type, content, status, created_at, prev_hash, data_hash, block_hash, nonce, height
+        FROM trace_record
+        WHERE batch_id = #{batchId}
+        ORDER BY height DESC, id DESC
+        LIMIT 1
+    </select>
+    <select id="selectByBatchId" resultMap="TraceRecordMap">
+        SELECT *
+        FROM trace_record
+        WHERE batch_id = #{batchId}
+        ORDER BY height ASC
+    </select>
+    <select id="selectByBatchIdOrderByHeight" resultMap="TraceRecordMap">
+        SELECT *
+        FROM trace_record
+        WHERE batch_id = #{batchId}
+        ORDER BY height ASC
+    </select>
+
+    <select id="selectLastByBatchId" resultMap="TraceRecordMap">
+        SELECT *
+        FROM trace_record
+        WHERE batch_id = #{batchId}
+        ORDER BY height DESC
+        LIMIT 1
+    </select>
+
+
+</mapper>
