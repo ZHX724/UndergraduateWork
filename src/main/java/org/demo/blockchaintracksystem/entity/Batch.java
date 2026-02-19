@@ -12,4 +12,7 @@ public class Batch {
     private String batchCode;
     private LocalDate productionDate;
     private LocalDateTime createdAt;
+    private Integer riskFlag;  // 0 正常，1 风险
+    private String riskNote;   // 监管备注
+
 }

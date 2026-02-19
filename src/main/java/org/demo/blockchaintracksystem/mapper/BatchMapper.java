@@ -9,6 +9,8 @@ import java.util.List;
 @Mapper
 public interface BatchMapper {
 
+    Batch selectByCode(@Param("batchCode") String batchCode);
+
     int insert(Batch batch);
 
     List<Batch> selectByProductId(@Param("productId") Long productId);
@@ -17,6 +19,11 @@ public interface BatchMapper {
 
     Batch selectById(@Param("id") Long id);
     Batch selectByBatchCode(String batchCode);
+    List<Batch> selectAll();
+
+    int updateRisk(@Param("id") Long id,
+                   @Param("riskFlag") Integer riskFlag,
+                   @Param("riskNote") String riskNote);
 
 }
 

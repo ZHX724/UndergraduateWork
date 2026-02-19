@@ -129,10 +129,13 @@
       <main class="content">
         <!-- 用户端模块 -->
         <template v-if="!isAdmin">
-          <Product v-if="active === 'products'" />
+          <Dashboard v-if="active === 'dashboard'" />
+          <Product v-else-if="active === 'products'" />
           <Batch v-else-if="active === 'batches'" />
           <TraceRecords v-else-if="active === 'records'" />
           <TraceQueryAdmin v-else-if="active === 'query'" />
+          <Risk v-else-if="active === 'risk'" />
+          <Stats v-else-if="active === 'stats'" />
 
           <!-- 其它占位 -->
           <template v-else>
@@ -143,9 +146,18 @@
               </div>
 
               <div class="hero-right">
-                <div class="kpi"><div class="kpi-num">—</div><div class="kpi-label">农产品</div></div>
-                <div class="kpi"><div class="kpi-num">—</div><div class="kpi-label">批次</div></div>
-                <div class="kpi"><div class="kpi-num">—</div><div class="kpi-label">异常</div></div>
+                <div class="kpi">
+                  <div class="kpi-num">—</div>
+                  <div class="kpi-label">农产品</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-num">—</div>
+                  <div class="kpi-label">批次</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-num">—</div>
+                  <div class="kpi-label">异常</div>
+                </div>
               </div>
             </section>
 
@@ -180,6 +192,11 @@ import Batch from './Batch.vue'
 import TraceRecords from './TraceRecords.vue'
 import TraceQueryAdmin from './TraceQueryAdmin.vue'
 import Audit from './Audit.vue'
+
+// ✅ 新增：三个页面组件（同目录）
+import Dashboard from './Dashboard.vue'
+import Risk from './Risk.vue'
+import Stats from './Stats.vue'
 
 import request from '@/utils/request'
 
@@ -270,7 +287,11 @@ onMounted(() => {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(226, 232, 240, 0.8);
 }
-.title { margin-top: 10px; font-size: 22px; letter-spacing: 0.2px; }
+.title {
+  margin-top: 10px;
+  font-size: 22px;
+  letter-spacing: 0.2px;
+}
 .brand {
   margin-top: 10px;
   display: flex;
@@ -291,9 +312,17 @@ onMounted(() => {
   background: linear-gradient(135deg, #2563eb, #22c55e);
   box-shadow: 0 10px 22px rgba(2, 6, 23, 0.15);
 }
-.txt .title { font-weight: 900; color: #0f172a; letter-spacing: 0.2px; }
+.txt .title {
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: 0.2px;
+}
 
-.actions { display: flex; align-items: center; gap: 10px; }
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .pill {
   padding: 6px 10px;
   border: 1px solid rgba(226, 232, 240, 0.9);
@@ -305,17 +334,17 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
 }
-.roleTag{
+.roleTag {
   padding: 2px 8px;
   border-radius: 999px;
   font-size: 12px;
-  border: 1px solid rgba(226,232,240,0.9);
-  background: rgba(248,250,252,1);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(248, 250, 252, 1);
   color: #475569;
 }
-.roleTag.admin{
-  background: rgba(34,197,94,0.10);
-  border-color: rgba(34,197,94,0.35);
+.roleTag.admin {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.35);
   color: #166534;
 }
 
@@ -340,9 +369,20 @@ onMounted(() => {
   border-bottom: 1px dashed rgba(148, 163, 184, 0.45);
   margin-bottom: 12px;
 }
-.menu-title { font-weight: 900; color: #0f172a; }
-.menu-sub { font-size: 12px; color: #64748b; margin-top: 4px; }
-.menu { display: flex; flex-direction: column; gap: 8px; }
+.menu-title {
+  font-weight: 900;
+  color: #0f172a;
+}
+.menu-sub {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 .item {
   text-align: left;
@@ -354,13 +394,15 @@ onMounted(() => {
   color: #0f172a;
   transition: transform 0.05s ease, box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
 }
-.item:active { transform: translateY(1px); }
+.item:active {
+  transform: translateY(1px);
+}
 .item.active {
   border-color: rgba(37, 99, 235, 0.55);
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
 .item.disabled,
-.item:disabled{
+.item:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   transform: none;
@@ -372,10 +414,17 @@ onMounted(() => {
   padding-top: 12px;
   border-top: 1px dashed rgba(148, 163, 184, 0.45);
 }
-.tip { font-size: 12px; color: #64748b; line-height: 1.6; }
+.tip {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.6;
+}
 
 /* Content */
-.content { padding: 18px; overflow: auto; }
+.content {
+  padding: 18px;
+  overflow: auto;
+}
 
 .hero {
   display: flex;
@@ -388,10 +437,21 @@ onMounted(() => {
   padding: 14px 16px;
   margin-bottom: 14px;
 }
-.h2 { margin: 0 0 6px; font-weight: 900; color: #0f172a; }
-.p { margin: 0; color: #64748b; font-size: 13px; }
+.h2 {
+  margin: 0 0 6px;
+  font-weight: 900;
+  color: #0f172a;
+}
+.p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
 
-.hero-right { display: flex; gap: 10px; }
+.hero-right {
+  display: flex;
+  gap: 10px;
+}
 .kpi {
   width: 88px;
   padding: 10px 10px;
@@ -400,10 +460,22 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.9);
   text-align: center;
 }
-.kpi-num { font-weight: 900; font-size: 18px; color: #0f1721; }
-.kpi-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+.kpi-num {
+  font-weight: 900;
+  font-size: 18px;
+  color: #0f1721;
+}
+.kpi-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 4px;
+}
 
-.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
 .card {
   background: rgba(255, 255, 255, 0.86);
   border: 1px solid rgba(226, 232, 240, 0.9);
@@ -412,9 +484,20 @@ onMounted(() => {
   min-height: 120px;
   box-shadow: 0 18px 40px rgba(2, 6, 23, 0.08);
 }
-.card-title { font-weight: 900; color: #0f172a; }
-.card-sub { color: #64748b; font-size: 13px; margin-top: 6px; }
-.card-actions { margin-top: 12px; display: flex; gap: 8px; }
+.card-title {
+  font-weight: 900;
+  color: #0f172a;
+}
+.card-sub {
+  color: #64748b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
 
 /* Buttons */
 .btn {
@@ -425,7 +508,9 @@ onMounted(() => {
   cursor: pointer;
   color: #0f172a;
 }
-.btn.ghost { background: transparent; }
+.btn.ghost {
+  background: transparent;
+}
 .btn.mini {
   padding: 6px 10px;
   border-radius: 10px;
@@ -440,7 +525,12 @@ onMounted(() => {
 }
 
 @media (max-width: 760px) {
-  .layout { grid-template-columns: 1fr; }
-  .sidebar { display: none; }
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    display: none;
+  }
 }
 </style>
+

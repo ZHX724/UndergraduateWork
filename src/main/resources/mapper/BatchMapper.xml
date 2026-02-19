@@ -11,37 +11,61 @@
         <result column="batch_code" property="batchCode"/>
         <result column="production_date" property="productionDate"/>
         <result column="created_at" property="createdAt"/>
+        <result column="risk_flag" property="riskFlag"/>
+        <result column="risk_note" property="riskNote"/>
     </resultMap>
 
-    <insert id="insert" parameterType="org.demo.blockchaintracksystem.entity.Batch"
-            useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO batch (product_id, batch_code, production_date, created_at)
-        VALUES (#{productId}, #{batchCode}, #{productionDate}, #{createdAt})
-    </insert>
-
-    <select id="selectByProductId" resultMap="BatchMap">
-        SELECT id, product_id, batch_code, production_date, created_at
-        FROM batch
-        WHERE product_id = #{productId}
-        ORDER BY id DESC
-    </select>
-
     <select id="selectById" resultMap="BatchMap">
-        SELECT id, product_id, batch_code, production_date, created_at
+        SELECT id, product_id, batch_code, production_date, created_at, risk_flag, risk_note
         FROM batch
         WHERE id = #{id}
         LIMIT 1
     </select>
 
-    <delete id="deleteById">
-        DELETE FROM batch WHERE id = #{id}
-    </delete>
     <select id="selectByBatchCode" resultMap="BatchMap">
-        SELECT id, product_id, batch_code, production_date, created_at
+        SELECT id, product_id, batch_code, production_date, created_at, risk_flag, risk_note
         FROM batch
         WHERE batch_code = #{batchCode}
         LIMIT 1
     </select>
 
+    <!-- 你接口里还有 selectByCode：也给它实现（避免你改接口） -->
+    <select id="selectByCode" resultMap="BatchMap">
+        SELECT id, product_id, batch_code, production_date, created_at, risk_flag, risk_note
+        FROM batch
+        WHERE batch_code = #{batchCode}
+        LIMIT 1
+    </select>
+
+    <select id="selectAll" resultMap="BatchMap">
+        SELECT id, product_id, batch_code, production_date, created_at, risk_flag, risk_note
+        FROM batch
+        ORDER BY id DESC
+    </select>
+
+    <select id="selectByProductId" resultMap="BatchMap">
+        SELECT id, product_id, batch_code, production_date, created_at, risk_flag, risk_note
+        FROM batch
+        WHERE product_id = #{productId}
+        ORDER BY id DESC
+    </select>
+
+    <insert id="insert" parameterType="org.demo.blockchaintracksystem.entity.Batch"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO batch (product_id, batch_code, production_date, created_at, risk_flag, risk_note)
+        VALUES (#{productId}, #{batchCode}, #{productionDate}, #{createdAt}, #{riskFlag}, #{riskNote})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM batch WHERE id = #{id}
+    </delete>
+
+    <!-- ✅ 风险标记：只改 batch 表，不动 trace_record，不破坏链 -->
+    <update id="updateRisk">
+        UPDATE batch
+        SET risk_flag = #{riskFlag},
+        risk_note = #{riskNote}
+        WHERE id = #{id}
+    </update>
 
 </mapper>

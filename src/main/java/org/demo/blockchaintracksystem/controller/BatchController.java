@@ -3,6 +3,7 @@ package org.demo.blockchaintracksystem.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.demo.blockchaintracksystem.entity.Batch;
+import org.demo.blockchaintracksystem.mapper.BatchMapper;
 import org.demo.blockchaintracksystem.service.BatchService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,26 @@ import java.util.List;
 public class BatchController {
 
     private final BatchService batchService;
+    private final BatchMapper batchMapper;
 
+    @GetMapping("/byCode")
+    public Batch byCode(@RequestParam String batchCode) {
+        return batchMapper.selectByCode(batchCode);
+    }
+
+    @GetMapping("/all")
+    public List<Batch> all() {
+        return batchMapper.selectAll();
+    }
+
+    // 监管端：标记/取消风险
+    @PostMapping("/risk")
+    public String risk(@RequestParam Long id,
+                       @RequestParam Integer riskFlag,
+                       @RequestParam(required = false) String riskNote) {
+        batchMapper.updateRisk(id, riskFlag, riskNote);
+        return "OK";
+    }
     @PostMapping("/create")
     public String create(@RequestParam Long productId,
                          @RequestParam String batchCode,
@@ -39,4 +59,5 @@ public class BatchController {
         if (uid == null) return "未登录";
         return batchService.delete(batchId);
     }
+
 }

@@ -1,12 +1,12 @@
 <template>
   <div class="page">
-    <!-- ✅ 统一顶栏（替代你左边那块扁卡片） -->
+    <!-- 顶栏 -->
     <header class="topbar">
-      <div class="brand" @click="goHome" title="回到查询页顶部">
+      <div class="brand" @click="goHome" title="回到顶部">
         <div class="logo">FT</div>
         <div class="txt">
           <div class="t1">农事溯源查询（消费者）</div>
-          <div class="t2">无需登录 · 输入批次号（batchCode）查看溯源时间线</div>
+          <div class="t2">无需登录 · 输入批次号（batchCode）查看时间线与监管结论</div>
         </div>
       </div>
 
@@ -20,7 +20,7 @@
         <div class="panel-head">
           <div>
             <div class="panel-title">消费者查询</div>
-            <div class="panel-sub">建议用批次码，例如：20260218-A01</div>
+            <div class="panel-sub">建议输入批次码，例如：20260218-A01</div>
           </div>
 
           <div class="panel-actions">
@@ -48,9 +48,33 @@
         </div>
 
         <div class="hint">
-          说明：默认只展示业务内容；区块 hash 细节可展开查看（便于答辩解释“链”）。
+          说明：消费者页面只展示“业务时间线 + 监管结论/备注”；链校验细节不对消费者公开。
         </div>
 
+        <!-- ✅ 监管结论（消费者只看这个，不看链校验） -->
+        <div v-if="batchLoaded" class="notice-wrap">
+          <div v-if="(batch?.riskFlag ?? batch?.risk_flag ?? 0) === 1" class="notice danger">
+            <div class="nt">
+              <span class="ic">⚠</span>
+              <b>监管提示：该批次已被标记为风险</b>
+            </div>
+            <div class="ns">
+              备注：{{ (batch?.riskNote ?? batch?.risk_note) || '（无备注）' }}
+            </div>
+          </div>
+
+          <div v-else class="notice ok">
+            <div class="nt">
+              <span class="ic">✅</span>
+              <b>监管提示：该批次未标记风险</b>
+            </div>
+            <div class="ns">
+              备注：{{ (batch?.riskNote ?? batch?.risk_note) || '（无备注）' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- 结果区 -->
         <div class="result">
           <div v-if="loading" class="empty">加载中…</div>
           <div v-else-if="chain.length === 0" class="empty">
@@ -73,6 +97,8 @@
                   <span>状态：{{ r.status }}</span>
                 </div>
 
+                <!-- ✅ 消费者不展示 hash/nonce（如果你想保留“可展开”，把这段 details 打开即可） -->
+                <!--
                 <details class="detail">
                   <summary>区块详情（hash/nonce）</summary>
                   <div class="kv"><b>prevHash</b>：{{ r.prevHash }}</div>
@@ -80,6 +106,7 @@
                   <div class="kv"><b>blockHash</b>：{{ r.blockHash }}</div>
                   <div class="kv"><b>nonce</b>：{{ r.nonce }}</div>
                 </details>
+                -->
               </div>
             </div>
           </div>
@@ -95,9 +122,14 @@ import { useRouter } from 'vue-router'
 import request from '@/utils/request'
 
 const router = useRouter()
+
 const code = ref('')
-const chain = ref([])
 const loading = ref(false)
+
+const batch = ref(null)
+const batchLoaded = ref(false)
+
+const chain = ref([])
 
 const fmt = (t) => (t ? String(t).replace('T', ' ') : '-')
 
@@ -105,10 +137,22 @@ const query = async () => {
   const c = code.value.trim()
   if (!c) return
   loading.value = true
+  batchLoaded.value = false
+  batch.value = null
+  chain.value = []
+
   try {
+    // 1) 先拿监管结论（风险标记/备注）
+    const b = await request.get('/batch/byCode', { params: { batchCode: c } })
+    batch.value = b.data || null
+    batchLoaded.value = true
+
+    // 2) 再拿时间线（消费者可看）
     const res = await request.get('/trace/chainByCode', { params: { batchCode: c } })
     chain.value = res.data || []
   } catch (e) {
+    batch.value = null
+    batchLoaded.value = true
     chain.value = []
   } finally {
     loading.value = false
@@ -117,6 +161,8 @@ const query = async () => {
 
 const clear = () => {
   code.value = ''
+  batch.value = null
+  batchLoaded.value = false
   chain.value = []
 }
 
@@ -134,7 +180,6 @@ const goHome = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   padding: 16px;
 }
 
-/* 顶栏（统一风格） */
 .topbar{
   max-width: 1100px;
   margin: 0 auto 14px;
@@ -170,7 +215,6 @@ const goHome = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 .t2{ margin-top: 2px; font-size: 12px; color:#64748b; }
 .top-actions{ display:flex; gap: 10px; }
 
-/* 主体 */
 .main{
   max-width: 1100px;
   margin: 0 auto;
@@ -220,6 +264,8 @@ const goHome = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   outline: none;
   font-size: 14px;
   background: #fff;
+  position: relative;
+  z-index: 2;
 }
 .input:focus{
   border-color: rgba(37,99,235,0.55);
@@ -233,7 +279,26 @@ const goHome = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   line-height: 1.6;
 }
 
-/* 结果区 */
+.notice-wrap{
+  margin-top: 12px;
+}
+.notice{
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(15,23,42,0.08);
+}
+.notice.ok{
+  background: rgba(16,185,129,0.12);
+  border-color: rgba(16,185,129,0.25);
+}
+.notice.danger{
+  background: rgba(239,68,68,0.10);
+  border-color: rgba(239,68,68,0.25);
+}
+.nt{ display:flex; align-items:center; gap: 8px; color:#0f172a; }
+.ic{ font-size: 14px; }
+.ns{ margin-top: 6px; font-size: 12px; color:#334155; line-height: 1.6; }
+
 .result{
   margin-top: 14px;
   padding-top: 12px;
@@ -294,14 +359,7 @@ const goHome = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   font-size: 12px;
   color:#64748b;
 }
-.detail{
-  margin-top: 10px;
-  font-size: 12px;
-  color:#334155;
-}
-.kv{ margin-top: 6px; word-break: break-all; }
 
-/* Buttons */
 .btn{
   padding: 10px 12px;
   border-radius: 12px;
@@ -325,3 +383,4 @@ const goHome = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   .t2{ display:none; }
 }
 </style>
+

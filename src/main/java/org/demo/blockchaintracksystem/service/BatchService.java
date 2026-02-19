@@ -23,6 +23,9 @@ public class BatchService {
         b.setProductId(productId);
         b.setBatchCode(batchCode.trim());
         b.setCreatedAt(LocalDateTime.now().withNano(0));
+        b.setRiskFlag(0);     // 默认正常
+        b.setRiskNote(null);  // 或者空字符串都行
+
 
         if (productionDate != null && !productionDate.trim().isEmpty()) {
             // 前端传 yyyy-MM-dd
