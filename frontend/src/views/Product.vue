@@ -1,12 +1,11 @@
 <template>
   <div class="product">
-    <!-- 顶部小标题条（嵌入式，不占整页） -->
+    <!-- 顶部小标题条 -->
     <div class="head">
       <div class="left">
-        <div class="logo">TR</div>
         <div class="txt">
-          <div class="title">农产品管理</div>
-          <div class="sub">新增 / 查看 / 删除你的农产品（基于 Session 归属到当前用户）</div>
+          <div class="h1">农产品管理</div>
+          <div class="sub">新增 / 查看 / 删除你的农产品。</div>
         </div>
       </div>
 
@@ -43,10 +42,6 @@
             <button class="btn ghost" type="button" :disabled="loading" @click="resetForm">
               清空
             </button>
-          </div>
-
-          <div class="hint">
-            提示：如果创建报 400，一般是后端接口接参方式不匹配（@RequestParam vs @RequestBody）。
           </div>
         </div>
       </section>
@@ -142,7 +137,6 @@ const createProduct = async () => {
 
   loading.value = true
   try {
-    // ✅ 方案 A：按你现在后端常见写法（@RequestParam）发 form-urlencoded
     const res = await request.post(
         '/product/create',
         new URLSearchParams({
@@ -156,7 +150,7 @@ const createProduct = async () => {
     resetForm()
     await loadList()
   } catch (e) {
-    // 把后端返回的错误信息也显示出来（方便定位 400 原因）
+
     const text = e?.response?.data || e?.message || '创建失败'
     toast(String(text), 'err')
   } finally {
@@ -195,8 +189,8 @@ onMounted(() => {
   flex-direction: column;
   gap: 12px;
 }
+.h1{ font-size: 22px; font-weight: 900; color:#0f172a; }
 
-/* 顶部小标题条 */
 .head {
   display: flex;
   align-items: center;

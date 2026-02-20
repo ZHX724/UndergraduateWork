@@ -25,7 +25,7 @@ public class TraceController {
         this.batchMapper = batchMapper;
     }
 
-    // 上链：新增一条溯源记录（自动生成 hash 链字段）
+    // 新增一条溯源记录
     @PostMapping("/add")
     public String add(@RequestParam Long batchId,
                       @RequestParam String type,
@@ -35,7 +35,6 @@ public class TraceController {
         Long uid = (Long) session.getAttribute("uid");
         if (uid == null) return "未登录";
 
-        // ✅ 建议：type 统一大写，避免前端乱传导致统计/筛选麻烦
         String safeType = (type == null) ? "" : type.trim().toUpperCase();
         if (safeType.isEmpty()) return "type 不能为空";
         if (content == null || content.trim().isEmpty()) return "content 不能为空";
@@ -49,7 +48,7 @@ public class TraceController {
         return blockchainService.verify(batchId);
     }
 
-    // 查询链（给前端时间线展示）
+    // 查询链，给前端时间线展示
     @GetMapping("/chain")
     public List<TraceRecord> chain(@RequestParam Long batchId) {
         return traceRecordMapper.selectByBatchIdOrderByHeight(batchId);

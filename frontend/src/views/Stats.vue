@@ -2,8 +2,8 @@
   <div class="wrap">
     <section class="hero">
       <div>
-        <div class="h1">数据统计与分析</div>
-        <div class="sub">基于批次数据做快速统计（无需额外接口）。</div>
+        <div class="h1">数据统计</div>
+        <div class="sub">基于批次数据做快速统计。</div>
       </div>
       <button class="btn" @click="load" :disabled="loading">{{ loading ? '刷新中…' : '刷新' }}</button>
     </section>
@@ -11,7 +11,7 @@
     <section class="grid">
       <div class="card">
         <div class="card-title">风险占比</div>
-        <div class="card-sub">risk_flag=1 / 全部批次</div>
+        <div class="card-sub">全部批次</div>
 
         <div class="ring">
           <div class="ring-bar">
@@ -26,7 +26,6 @@
 
       <div class="card">
         <div class="card-title">近 7 天新增批次</div>
-        <div class="card-sub">按 created_at 日期统计</div>
 
         <div v-if="loading" class="empty">加载中…</div>
         <div v-else class="bars">
@@ -38,8 +37,6 @@
             <div class="num">{{ d.c }}</div>
           </div>
         </div>
-
-        <div class="tip">说明：这里是“答辩用可视化”，后续你想接 ECharts 也很容易。</div>
       </div>
     </section>
   </div>
@@ -62,7 +59,7 @@ const pct = computed(() => {
 const toDayStr = (dt) => {
   if (!dt) return null
   const s = String(dt)
-  // 兼容 "2026-02-18T16:48:36" / "2026-02-18 16:48:36"
+
   return s.slice(0, 10)
 }
 

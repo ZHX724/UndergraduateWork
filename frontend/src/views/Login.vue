@@ -36,7 +36,6 @@
           没有账号？ <a href="#" @click.prevent="router.push('/register')">去注册</a>
         </div>
 
-        <!-- ✅ 新增：消费者查询入口（免登录） -->
         <div class="public-card" @click="goPublicQuery" role="button" tabindex="0" @keyup.enter="goPublicQuery">
           <div class="pc-left">
             <div class="pc-title">消费者溯源查询</div>
@@ -84,14 +83,14 @@ const login = async () => {
   }
 }
 
-// ✅ 新增：免登录跳消费者查询
+
 const goPublicQuery = () => {
   router.push('/public/query')
 }
 </script>
 
 <style scoped>
-/* 你原来如果有样式就保留；下面只补充“消费者卡片”的样式（不影响现有布局） */
+
 
 .public-card{
   margin-top: 14px;

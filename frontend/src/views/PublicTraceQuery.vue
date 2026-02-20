@@ -51,7 +51,7 @@
           说明：消费者页面只展示“业务时间线 + 监管结论/备注”；链校验细节不对消费者公开。
         </div>
 
-        <!-- ✅ 监管结论（消费者只看这个，不看链校验） -->
+
         <div v-if="batchLoaded" class="notice-wrap">
           <div v-if="(batch?.riskFlag ?? batch?.risk_flag ?? 0) === 1" class="notice danger">
             <div class="nt">
@@ -97,16 +97,6 @@
                   <span>状态：{{ r.status }}</span>
                 </div>
 
-                <!-- ✅ 消费者不展示 hash/nonce（如果你想保留“可展开”，把这段 details 打开即可） -->
-                <!--
-                <details class="detail">
-                  <summary>区块详情（hash/nonce）</summary>
-                  <div class="kv"><b>prevHash</b>：{{ r.prevHash }}</div>
-                  <div class="kv"><b>dataHash</b>：{{ r.dataHash }}</div>
-                  <div class="kv"><b>blockHash</b>：{{ r.blockHash }}</div>
-                  <div class="kv"><b>nonce</b>：{{ r.nonce }}</div>
-                </details>
-                -->
               </div>
             </div>
           </div>

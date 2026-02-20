@@ -15,7 +15,6 @@ public class BlockchainService {
 
     private final TraceRecordMapper traceRecordMapper;
 
-    // 难度：前导 0 的数量（太大你会卡死）
     private static final int DIFFICULTY = 4;
 
     public String append(Long batchId, String type, String content) {

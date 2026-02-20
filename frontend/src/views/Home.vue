@@ -90,7 +90,7 @@
             异常/风险
           </button>
 
-          <!-- 审核：普通用户灰不可点；监管端可点且默认选中 -->
+
           <button
               class="item"
               :class="{ active: active === 'audit', disabled: !isAdminUserCanClickAudit }"
@@ -112,22 +112,10 @@
             统计分析
           </button>
         </nav>
-
-        <div class="sidebar-foot">
-          <div class="tip">
-            <template v-if="isAdmin">
-              ✅ 当前为监管端：仅开放“审核（监管端）”，其它功能已锁定。
-            </template>
-            <template v-else>
-              ✅ 当前为用户端：已锁定“审核（监管端）”，其它功能正常使用。
-            </template>
-          </div>
-        </div>
       </aside>
 
-      <!-- Content -->
       <main class="content">
-        <!-- 用户端模块 -->
+
         <template v-if="!isAdmin">
           <Dashboard v-if="active === 'dashboard'" />
           <Product v-else-if="active === 'products'" />
@@ -137,7 +125,7 @@
           <Risk v-else-if="active === 'risk'" />
           <Stats v-else-if="active === 'stats'" />
 
-          <!-- 其它占位 -->
+
           <template v-else>
             <section class="hero">
               <div class="hero-left">
@@ -174,7 +162,7 @@
           </template>
         </template>
 
-        <!-- 监管端模块：只允许 audit -->
+
         <template v-else>
           <Audit />
         </template>
@@ -193,7 +181,6 @@ import TraceRecords from './TraceRecords.vue'
 import TraceQueryAdmin from './TraceQueryAdmin.vue'
 import Audit from './Audit.vue'
 
-// ✅ 新增：三个页面组件（同目录）
 import Dashboard from './Dashboard.vue'
 import Risk from './Risk.vue'
 import Stats from './Stats.vue'
@@ -203,7 +190,7 @@ import request from '@/utils/request'
 const router = useRouter()
 
 const user = ref(localStorage.getItem('user') || '未登录')
-const role = ref(0) // 0=用户端 1=监管端
+const role = ref(0)
 const active = ref('dashboard')
 
 const isAdmin = computed(() => Number(role.value) === 1)
@@ -223,16 +210,14 @@ const titleMap = {
 }
 
 const setActive = (key) => {
-  // 监管端：只能待在 audit
   if (isAdmin.value) {
     active.value = 'audit'
     return
   }
-  // 用户端：点到 audit 直接阻止
+
   if (key === 'audit') return
   active.value = key
 }
-
 const logout = async () => {
   try {
     await request.post('/auth/logout')
@@ -242,24 +227,18 @@ const logout = async () => {
 }
 
 const goHome = () => {
-  // 监管端点击 logo 也回 audit
+
   active.value = isAdmin.value ? 'audit' : 'dashboard'
 }
-
 async function loadMe() {
-  // 复用你后端 /auth/me：建议返回 {login:true, username, role}
   const res = await request.get('/auth/me')
   const me = res.data || {}
   if (me?.username) user.value = me.username
   role.value = Number(me?.role ?? 0)
-
-  // 监管端登录后直接跳 audit
   active.value = isAdmin.value ? 'audit' : 'dashboard'
 }
-
 onMounted(() => {
   loadMe().catch(() => {
-    // 如果 /auth/me 失败，交给路由守卫处理，这里不强行跳转
   })
 })
 </script>
@@ -409,18 +388,7 @@ onMounted(() => {
   box-shadow: none;
 }
 
-.sidebar-foot {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px dashed rgba(148, 163, 184, 0.45);
-}
-.tip {
-  font-size: 12px;
-  color: #64748b;
-  line-height: 1.6;
-}
 
-/* Content */
 .content {
   padding: 18px;
   overflow: auto;
@@ -499,7 +467,6 @@ onMounted(() => {
   gap: 8px;
 }
 
-/* Buttons */
 .btn {
   padding: 8px 12px;
   border-radius: 12px;

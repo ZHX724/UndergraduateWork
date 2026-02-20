@@ -3,7 +3,7 @@
     <section class="hero">
       <div>
         <div class="h1">异常 / 风险记录</div>
-        <div class="sub">这里展示监管端标记为风险的批次（risk_flag=1）。</div>
+        <div class="sub">这里展示监管端标记为风险的批次。</div>
       </div>
       <div class="actions">
         <button class="btn" @click="load" :disabled="loading">{{ loading ? '刷新中…' : '刷新' }}</button>
@@ -12,7 +12,6 @@
 
     <section class="card">
       <div class="card-title">风险批次列表</div>
-      <div class="card-sub">可作为“监管提示”的来源（消费者只看这里的结论/备注）。</div>
 
       <div v-if="loading" class="empty">加载中…</div>
       <div v-else-if="rows.length === 0" class="empty">暂无风险批次</div>

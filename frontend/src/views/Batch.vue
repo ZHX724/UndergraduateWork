@@ -2,8 +2,8 @@
   <div class="batch">
     <section class="hero">
       <div class="hero-left">
-        <h2 class="h2">批次管理</h2>
-        <p class="p">先选择一个农产品，然后为它创建多个生产批次（batch_code）。</p>
+        <div class="h1">批次管理</div>
+        <div class="sub">先选择一个农产品，然后为它创建多个生产批次。</div>
       </div>
 
       <div class="hero-right">
@@ -211,7 +211,7 @@ const delBatch = async (batchId) => {
   }
 }
 
-// 先用 localStorage 让 records 页自动带入 batchId（下一步再优化成事件/状态管理）
+
 const goChain = (batchId) => {
   localStorage.setItem('selectedBatchId', String(batchId))
   toast('已选择批次，去“溯源记录”上链', 'ok')
@@ -267,7 +267,7 @@ loadProducts()
   font-size:14px;
   background:#fff;
 }
-
+.h1{ font-size: 22px; font-weight: 900; color:#0f172a; }
 .actions{ display:flex; gap:10px; margin-top: 10px; }
 
 .btn{
@@ -322,27 +322,27 @@ loadProducts()
 .meta{ margin-top:8px; font-size:12px; color:#64748b; line-height:1.6; }
 .item-actions{ margin-top:10px; display:flex; gap:10px; }
 
-/* 让左右两张卡片更“长”，视觉更饱满 */
+
 .grid2 {
-  align-items: stretch; /* 让左右卡片同高（关键） */
+  align-items: stretch;
 }
 
 .grid2 > .card {
-  min-height: 420px;      /* 你可以调成 460/520 看效果 */
+  min-height: 420px;
 }
 
-/* 左侧卡片：用 flex 让内容纵向分布，避免三段文字挤成一团 */
+/* 左侧卡片 */
 .grid2 > .card:first-child {
   display: flex;
   flex-direction: column;
 }
 
-/* 左侧卡片里的内容区（你原来的各块），让表单区自动撑开 */
+/* 左侧卡片里的内容区 */
 .grid2 > .card:first-child .field:last-of-type {
   margin-bottom: auto;
 }
 
-/* 按钮区贴底，整体更稳 */
+/* 按钮区贴底 */
 .grid2 > .card:first-child .actions {
   margin-top: auto;
   padding-top: 12px;

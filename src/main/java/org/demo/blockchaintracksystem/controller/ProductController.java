@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
-@CrossOrigin // 你现在走 Vite proxy，其实可要可不要；先留着不动
+@CrossOrigin
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -19,7 +19,7 @@ public class ProductController {
         this.productMapper = productMapper;
     }
 
-    // 新增产品（从 Session 获取 uid）
+    // 新增产品
     @PostMapping("/create")
     public String create(@RequestParam String name,
                          @RequestParam(required = false) String description,
@@ -38,7 +38,7 @@ public class ProductController {
         return "创建成功";
     }
 
-    // 查询我的产品列表（从 Session 获取 uid）
+    // 查询我的产品列表
     @GetMapping("/my")
     public List<Product> my(HttpSession session) {
         Long uid = (Long) session.getAttribute("uid");
@@ -46,7 +46,7 @@ public class ProductController {
         return productMapper.selectByUserId(uid);
     }
 
-    // 删除产品（只能删自己的，从 Session 获取 uid）
+    // 删除产品
     @PostMapping("/delete")
     public String delete(@RequestParam Long productId, HttpSession session) {
         Long uid = (Long) session.getAttribute("uid");

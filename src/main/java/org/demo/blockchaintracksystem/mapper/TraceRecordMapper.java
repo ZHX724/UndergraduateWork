@@ -11,10 +11,10 @@ public interface TraceRecordMapper {
 
     int insert(TraceRecord r);
 
-    // ✅ verify 用：查询该 batch 的整条链（按 height 从小到大）
+    // 查询该 batch 的整条链（按 height 从小到大）
     List<TraceRecord> selectByBatchIdOrderByHeight(@Param("batchId") Long batchId);
 
-    // ✅ 新增区块用：查询最后一个区块（最大 height）
+    // 查询最后一个区块（最大 height）
     TraceRecord selectLastByBatchId(@Param("batchId") Long batchId);
 }
 

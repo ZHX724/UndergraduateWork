@@ -2,8 +2,8 @@
   <div class="wrap">
     <section class="hero">
       <div class="hero-left">
-        <h2 class="h2">溯源查询（管理端）</h2>
-        <p class="p">选择农产品与批次，查询该批次上链记录，并可校验链完整性。</p>
+        <div class="h1">溯源查询</div>
+        <div class="sub">选择农产品与批次，查询该批次上链记录，并可校验链完整性。</div>
       </div>
       <div class="hero-right">
         <button class="btn ghost" type="button" @click="refresh">刷新</button>
@@ -11,7 +11,7 @@
     </section>
 
     <section class="grid2">
-      <!-- 左：条件 -->
+
       <div class="card">
         <div class="card-title">查询条件</div>
 
@@ -33,7 +33,6 @@
               #{{ b.id }} · {{ b.batchCode }}
             </option>
           </select>
-          <div class="hint">提示：也可以先去“批次管理”创建批次。</div>
         </div>
 
         <div class="actions">
@@ -52,7 +51,7 @@
         </button>
       </div>
 
-      <!-- 右：时间线 -->
+
       <div class="card">
         <div class="card-title">溯源时间线（按 height 升序）</div>
 
@@ -195,7 +194,7 @@ refresh()
   min-height: 360px;
 }
 .card-title{ font-weight:900; color:#0f172a; margin-bottom:10px; }
-
+.h1{ font-size: 22px; font-weight: 900; color:#0f172a; }
 .field .label{ font-size:12px; color:#475569; margin-bottom:6px; }
 .input{
   width:100%;

@@ -5,7 +5,9 @@
         <div class="h1">仪表盘</div>
         <div class="sub">快速查看批次规模、风险概况、最近新增。</div>
       </div>
-      <button class="btn" @click="load" :disabled="loading">{{ loading ? '刷新中…' : '刷新' }}</button>
+      <button class="btn ghost" type="button" :disabled="loadingList" @click="loadList">
+        {{ loadingList ? '刷新中…' : '刷新列表' }}
+      </button>
     </section>
 
     <section class="kpis">
@@ -54,15 +56,7 @@
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-title">说明（答辩友好）</div>
-        <div class="card-sub">把“监管提示”作为对外展示口径</div>
-        <ul class="ul">
-          <li>消费者页面：只展示监管结论/备注，不暴露链校验细节。</li>
-          <li>管理端：可做链校验 + 风险标记，用于内部追溯。</li>
-          <li>链数据不可删除：即使标记风险也只是“监管结论”，不破坏历史记录。</li>
-        </ul>
-      </div>
+
     </section>
   </div>
 </template>

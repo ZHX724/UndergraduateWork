@@ -2,12 +2,9 @@
   <div class="records">
     <div class="head">
       <div class="left">
-        <div class="logo">BC</div>
         <div class="txt">
-          <div class="title">溯源上链（区块链）</div>
-          <div class="sub">
-            追加式写入：每次提交都会生成 data_hash / block_hash / nonce / height，并可一键校验链完整性。
-          </div>
+          <div class="h1">溯源上链</div>
+          <div class="sub">追加式写入，并可一键校验链完整性</div>
         </div>
       </div>
 
@@ -32,9 +29,7 @@
           <div class="field">
             <div class="label">批次 ID（batchId）</div>
             <input class="input" v-model="form.batchId" placeholder="例如：1（建议后续由批次管理页自动带入）" />
-            <div class="hint">
-              说明：链按 batchId 分组。现在先手动填，后续做“批次管理”后可改成下拉选择。
-            </div>
+
           </div>
 
           <div class="field">
@@ -56,7 +51,7 @@
 
           <div class="actions">
             <button class="btn primary" type="button" :disabled="adding" @click="addRecord">
-              {{ adding ? '上链中…' : '上链（追加写入）' }}
+              {{ adding ? '上链中…' : '上链' }}
             </button>
             <button class="btn ghost" type="button" :disabled="adding" @click="resetForm">
               清空
@@ -347,6 +342,7 @@ const verifyChain = async () => {
 .blockTop{
   display:flex; align-items:center; gap:8px;
 }
+.h1{ font-size: 22px; font-weight: 900; color:#0f172a; }
 .h{
   font-weight: 900; color:#0f172a;
   background: rgba(2,132,199,0.08);
