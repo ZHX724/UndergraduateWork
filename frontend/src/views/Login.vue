@@ -91,7 +91,16 @@ const goPublicQuery = () => {
 
 <style scoped>
 
-
+.page{
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 24px;
+  background:
+      linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.35)),
+      url('http://localhost:8080/home.png') center center / cover no-repeat;
+}
 .public-card{
   margin-top: 14px;
   padding: 14px 16px;

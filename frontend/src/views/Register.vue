@@ -69,3 +69,60 @@ const register = async () => {
   }
 }
 </script>
+
+<style scoped>
+
+.page{
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding: 24px;
+  background:
+      linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.35)),
+      url('http://localhost:8080/home.png') center center / cover no-repeat;
+}
+.public-card{
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  user-select: none;
+
+  background: rgba(255,255,255,0.82);
+  border: 1px solid rgba(226,232,240,0.9);
+  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.10);
+  backdrop-filter: blur(10px);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+
+  transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.public-card:hover{
+  transform: translateY(-1px);
+  border-color: rgba(37, 99, 235, 0.55);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12), 0 18px 40px rgba(2, 6, 23, 0.12);
+}
+
+.pc-title{
+  font-weight: 900;
+  color:#0f172a;
+}
+
+.pc-sub{
+  margin-top: 6px;
+  font-size: 12px;
+  color:#64748b;
+  line-height: 1.5;
+}
+
+.pc-right{
+  font-weight: 900;
+  color:#1d4ed8;
+  white-space: nowrap;
+}
+</style>

@@ -249,9 +249,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: radial-gradient(1200px 600px at 10% 10%, rgba(255, 255, 255, 0.35), transparent 60%),
-  radial-gradient(900px 500px at 90% 30%, rgba(255, 255, 255, 0.25), transparent 55%),
-  linear-gradient(135deg, #0ea5e9, #6366f1);
+  background:
+      linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.35)),
+      url('http://localhost:8080/home.png') center center / cover no-repeat;
 }
 
 /* Topbar */

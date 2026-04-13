@@ -28,7 +28,7 @@
         <div class="form">
           <div class="field">
             <div class="label">批次 ID（batchId）</div>
-            <input class="input" v-model="form.batchId" placeholder="例如：1（建议后续由批次管理页自动带入）" />
+            <input class="input" v-model="form.batchId" placeholder="请输入您的批次号" />
 
           </div>
 
