@@ -25,7 +25,7 @@ public class BlockchainService {
 
         LocalDateTime now = LocalDateTime.now().withNano(0);
 
-        // dataHash：把“业务数据”固定成摘要（不含 nonce）
+        // dataHash：把“业务数据”固定成摘要
         String dataPlain = batchId + "|" + nextHeight + "|" + type + "|" + content + "|" + now + "|" + prevHash;
         String dataHash = HashUtil.sha256(dataPlain);
 

@@ -40,6 +40,29 @@ public class AuthController {
         session.invalidate();
         return "已退出";
     }
+    @PostMapping("/register")
+    public String register(@RequestParam String username,
+                           @RequestParam String password,
+                           HttpSession session) {
+        // 检查是否已存在用户名
+        User existing = userMapper.findByUsername(username);
+        if (existing != null) {
+            return "用户名已存在";
+        }
+        // 创建并保存新用户，当前系统使用明文密码
+        User user = new User();
+        user.setUsername(username);
+        user.setPasswordHash(password);
+        user.setRole(0);
+        user.setStatus(1);
+        userMapper.insert(user);
+
+        // 使用生成的 ID 初始化会话，实现自动登录
+        session.setAttribute("uid", user.getId());
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("role", user.getRole());
+        return "注册成功";
+    }
 
     @GetMapping("/me")
     public Map<String, Object> me(HttpSession session) {

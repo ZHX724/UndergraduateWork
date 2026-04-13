@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -26,7 +27,6 @@ public class BatchService {
         b.setRiskFlag(0);
         b.setRiskNote(null);
 
-
         if (productionDate != null && !productionDate.trim().isEmpty()) {
             // 前端传 yyyy-MM-dd
             b.setProductionDate(LocalDate.parse(productionDate.trim()));
@@ -44,5 +44,17 @@ public class BatchService {
         if (id == null) return "batchId 不能为空";
         int n = batchMapper.deleteById(id);
         return n > 0 ? "删除成功" : "未找到该批次";
+    }
+
+    /**
+     * 返回指定用户的全部批次。
+     * @param userId 用户ID
+     * @return 属于该用户的批次列表
+     */
+    public List<Batch> listByUser(Long userId) {
+        if (userId == null) {
+            return Collections.emptyList();
+        }
+        return batchMapper.selectByUserId(userId);
     }
 }

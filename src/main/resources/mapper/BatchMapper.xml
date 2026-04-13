@@ -50,6 +50,15 @@
         ORDER BY id DESC
     </select>
 
+    <!-- 根据用户 ID 查询批次：关联 product 表过滤 user_id -->
+    <select id="selectByUserId" resultMap="BatchMap">
+        SELECT b.id, b.product_id, b.batch_code, b.production_date, b.created_at, b.risk_flag, b.risk_note
+        FROM batch b
+        JOIN product p ON b.product_id = p.id
+        WHERE p.user_id = #{userId}
+        ORDER BY b.id DESC
+    </select>
+
     <insert id="insert" parameterType="org.demo.blockchaintracksystem.entity.Batch"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO batch (product_id, batch_code, production_date, created_at, risk_flag, risk_note)

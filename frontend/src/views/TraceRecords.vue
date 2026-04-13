@@ -215,14 +215,14 @@ const verifyChain = async () => {
   verifying.value = true
   try {
     const res = await request.get('/trace/verify', { params: { batchId } })
-    // 兼容：后端可能返回 String / Map / Boolean
+
     const data = res.data
     if (typeof data === 'string') {
       verifyResult.value = { ok: !data.includes('篡改') && !data.includes('失败'), message: data }
     } else if (typeof data === 'boolean') {
       verifyResult.value = { ok: data, message: data ? '链完整（verify=true）' : '链疑似被篡改（verify=false）' }
     } else if (data && typeof data === 'object') {
-      // 如果你后端后面改成 {ok,message,badHeight} 也能直接吃
+
       const ok = data.ok ?? data.valid ?? true
       verifyResult.value = { ok, message: data.message || JSON.stringify(data) }
     } else {

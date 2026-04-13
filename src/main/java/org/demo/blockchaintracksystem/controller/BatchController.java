@@ -24,8 +24,23 @@ public class BatchController {
     }
 
     @GetMapping("/all")
-    public List<Batch> all() {
-        return batchMapper.selectAll();
+    public List<Batch> all(HttpSession session) {
+        Long uid = (Long) session.getAttribute("uid");
+        Object roleObj = session.getAttribute("role");
+        Integer role = null;
+        if (roleObj instanceof Integer) {
+            role = (Integer) roleObj;
+        }
+        // 如果未登录，则返回空列表
+        if (uid == null) {
+            return Collections.emptyList();
+        }
+        // 监管端（role==1）查看全部批次
+        if (role != null && role == 1) {
+            return batchMapper.selectAll();
+        }
+        // 普通用户只查看自己名下产品的批次
+        return batchMapper.selectByUserId(uid);
     }
 
     // 监管端：标记/取消风险
@@ -36,6 +51,7 @@ public class BatchController {
         batchMapper.updateRisk(id, riskFlag, riskNote);
         return "OK";
     }
+
     @PostMapping("/create")
     public String create(@RequestParam Long productId,
                          @RequestParam String batchCode,

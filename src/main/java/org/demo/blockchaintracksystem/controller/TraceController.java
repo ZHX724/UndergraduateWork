@@ -48,7 +48,7 @@ public class TraceController {
         return blockchainService.verify(batchId);
     }
 
-    // 查询链，给前端时间线展示
+    // 查询链
     @GetMapping("/chain")
     public List<TraceRecord> chain(@RequestParam Long batchId) {
         return traceRecordMapper.selectByBatchIdOrderByHeight(batchId);
