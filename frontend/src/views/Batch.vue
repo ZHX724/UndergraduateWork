@@ -48,7 +48,8 @@
 
         <div class="field">
           <div class="label">生产日期 productionDate（可选）</div>
-          <input class="input" v-model="form.productionDate" placeholder="yyyy-MM-dd" />
+          <!-- 使用日期选择器替代普通文本框 -->
+          <input type="date" class="input" v-model="form.productionDate" />
         </div>
 
         <div class="actions">

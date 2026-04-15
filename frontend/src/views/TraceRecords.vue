@@ -32,16 +32,10 @@
 
           </div>
 
+          <!-- 阶段类型输入框改为普通文本框 -->
           <div class="field">
             <div class="label">阶段类型（type）</div>
-            <select class="input" v-model="form.type">
-              <option value="PRODUCTION">PRODUCTION（生产）</option>
-              <option value="PROCESSING">PROCESSING（加工）</option>
-              <option value="TRANSPORT">TRANSPORT（运输）</option>
-              <option value="DISTRIBUTION">DISTRIBUTION（流通）</option>
-              <option value="CORRECTION">CORRECTION（补充/更正）</option>
-              <option value="RISK">RISK（异常/风险）</option>
-            </select>
+            <input class="input" v-model="form.type" placeholder="请输入阶段类型，如 PRODUCTION/TRANSPORT 等" />
           </div>
 
           <div class="field">
@@ -119,7 +113,7 @@ import request from '@/utils/request'
 
 const form = reactive({
   batchId: '',
-  type: 'PRODUCTION',
+  type: '',
   content: ''
 })
 
@@ -142,7 +136,7 @@ function toast(text, type = 'ok') {
 }
 
 const resetForm = () => {
-  form.type = 'PRODUCTION'
+  form.type = ''
   form.content = ''
 }
 
