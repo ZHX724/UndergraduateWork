@@ -42,13 +42,12 @@
         <div class="card-title">新建批次</div>
 
         <div class="field">
-          <div class="label">批次号 batchCode</div>
+          <div class="label">批次码 batchCode</div>
           <input class="input" v-model="form.batchCode" placeholder="例如：20260218-A01" />
         </div>
 
         <div class="field">
-          <div class="label">生产日期 productionDate（可选）</div>
-          <!-- 使用日期选择器替代普通文本框 -->
+          <div class="label">生产日期 productionDate</div>
           <input type="date" class="input" v-model="form.productionDate" />
         </div>
 

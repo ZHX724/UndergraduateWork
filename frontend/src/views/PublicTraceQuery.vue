@@ -53,24 +53,31 @@
 
 
         <div v-if="batchLoaded" class="notice-wrap">
-          <div v-if="(batch?.riskFlag ?? batch?.risk_flag ?? 0) === 1" class="notice danger">
+          <!-- 批次不存在 -->
+          <div v-if="!batch" class="notice danger">
+            <div class="nt">
+              <span class="ic">❌</span>
+              <b>监管提示：无效的批次码</b>
+            </div>
+            <div class="ns">暂未查询到该批次，请检查输入是否正确</div>
+          </div>
+
+          <!-- 批次存在且被标记风险 -->
+          <div v-else-if="(batch?.riskFlag ?? batch?.risk_flag ?? 0) === 1" class="notice danger">
             <div class="nt">
               <span class="ic">⚠</span>
               <b>监管提示：该批次已被标记为风险</b>
             </div>
-            <div class="ns">
-              备注：{{ (batch?.riskNote ?? batch?.risk_note) || '（无备注）' }}
-            </div>
+            <div class="ns">备注：{{ (batch?.riskNote ?? batch?.risk_note) || '（无备注）' }}</div>
           </div>
 
+          <!-- 批次存在且未标记风险 -->
           <div v-else class="notice ok">
             <div class="nt">
               <span class="ic">✅</span>
               <b>监管提示：该批次未标记风险</b>
             </div>
-            <div class="ns">
-              备注：{{ (batch?.riskNote ?? batch?.risk_note) || '（无备注）' }}
-            </div>
+            <div class="ns">备注：{{ (batch?.riskNote ?? batch?.risk_note) || '（无备注）' }}</div>
           </div>
         </div>
 
