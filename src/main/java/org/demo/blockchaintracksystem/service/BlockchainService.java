@@ -25,14 +25,15 @@ public class BlockchainService {
 
         LocalDateTime now = LocalDateTime.now().withNano(0);
 
-        // dataHash：把“业务数据”固定成摘要
+        // dataHash
         String dataPlain = batchId + "|" + nextHeight + "|" + type + "|" + content + "|" + now + "|" + prevHash;
         String dataHash = HashUtil.sha256(dataPlain);
 
-        // blockHash：prevHash + dataHash + nonce + height 做 PoW
+        // blockHash
         int nonce = 0;
         String blockHash;
         String prefix = "0".repeat(DIFFICULTY);
+
 
         while (true) {
             String blockPlain = prevHash + "|" + dataHash + "|" + nonce + "|" + nextHeight;
@@ -40,7 +41,6 @@ public class BlockchainService {
             if (blockHash.startsWith(prefix)) break;
             nonce++;
         }
-
         TraceRecord r = new TraceRecord();
         r.setBatchId(batchId);
         r.setType(type);
@@ -52,9 +52,7 @@ public class BlockchainService {
         r.setBlockHash(blockHash);
         r.setNonce(nonce);
         r.setHeight(nextHeight);
-
         traceRecordMapper.insert(r);
-
         return "上链成功 height=" + nextHeight + " hash=" + blockHash;
     }
 

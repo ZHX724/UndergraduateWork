@@ -195,7 +195,6 @@ const active = ref('dashboard')
 
 const isAdmin = computed(() => Number(role.value) === 1)
 
-// 普通用户：audit 不可点；监管端：audit 可点
 const isAdminUserCanClickAudit = computed(() => isAdmin.value)
 
 const titleMap = {
